@@ -2,7 +2,7 @@
 
 #
 # This is the main script for the docker.
-# It iterate recursively over /_nodes/stats and get all numerical metrics
+# It iterates recursively over /_nodes/stats and retrieves all numerical metrics
 #
 # Written by Roi Rav-Hon @ Logz.io (roi@logz.io)
 #
@@ -12,11 +12,11 @@
 #       ELASTICSEARCH_ADDR - The elasticsearch cluster to monitor
 #
 #   Optional:
-#       GRAPHITE_PREFIX - The prefix under graphite the metrics should be placed (Default: Elasticsearch)
+#       GRAPHITE_PREFIX - The prefix under graphite the metrics should be placed in (Default: Elasticsearch)
 #       GRAPHITE_PORT - Graphite pickle port (Default: 2004)
-#       INTERVAL_SECONDS - What is the sample interval (Default: 10)
-#       BULK_SIZE - How many metrics should each bulk to graphite holds (Default: 50)
-#       MAX_RETRY_BULK - How many times should we re-try each bulk in case of IOError (Default: 3)
+#       INTERVAL_SECONDS - The sample interval (Default: 10)
+#       BULK_SIZE - The amount of metrics to be sent in each bulk request (Default: 50)
+#       MAX_RETRY_BULK - The number of repeated attempts to send a bulk upon IOError failure (Default: 3)
 
 
 import os
