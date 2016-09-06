@@ -13,6 +13,6 @@ The following parameters need to be passed as environment variables to the conta
 |GRAPHITE|The graphite server the metrics should end up in|Yes|-|
 |GRAPHITE_PREFIX|The prefix under graphite you want your metrics in. We will add the cluster name, and the node name after that|No|Elasticsearch|
 |GRAPHITE_PORT|Graphite pickle port|No|2004|
-|INTERVAL_SECONDS|The frequency in which Elsaticsearch is to be sampled (preferably, the same value as your graphite configuration)|No|10|
+|INTERVAL_SECONDS|The frequency in which Elasticsearch is to be sampled (preferably, the same value as your graphite configuration)|No|10|
 |BULK_SIZE|The amount of metrics to be sent in each bulk request|No|50|
 |MAX_RETRY_BULK|The number of repeated attempts to send a bulk that failed on IOError (originated from graphite)|No|3|
