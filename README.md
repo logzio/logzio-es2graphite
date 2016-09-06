@@ -6,6 +6,7 @@ This docker will query your Elasticsearch cluster under /_node/stats and send to
 
 ## Parameters
 Need to be passed as environment variables to the container (-e ...=... -e ...=... ...)
+
 |Name|Description|Mandatory|Default| 
 |---|---|---|---|
 |ELASTICSEARCH_ADDR|Your Elasticsearch cluster address to monitor (Preferably the ip/hostname of one of your client nodes) - No protocol nor port required|Yes|-|
