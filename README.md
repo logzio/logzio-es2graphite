@@ -1,5 +1,6 @@
 # Logzio es2graphite
 This is the codebase for Logz.io's es2graphite docker image.
+[Docker Hub](https://hub.docker.com/r/logzio/es2graphite/)
 
 ## Overview
 This docker container will query your Elasticsearch cluster under /_node/stats and send any numerical metric found to graphite.
