@@ -38,7 +38,7 @@ docker run --restart=always -d --name="es2graphite" \
 ```
 
 
-## Grafana Screen Shots
+## Grafana Screenshots
 ![Dashboard prtscr 1](https://i.imgsafe.org/fe55084226.png)
 ![Dashboard prtscr 2](https://i.imgsafe.org/fe551c38d3.png)
 ![Dashboard prtscr 3](https://i.imgsafe.org/fe550e9a68.png)
