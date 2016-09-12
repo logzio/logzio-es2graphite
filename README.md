@@ -37,6 +37,11 @@ docker run --restart=always -d --name="es2graphite" \
                         logzio/es2graphite
 ```
 
+## Dashboard Example
+You can take the dashboard here under Grafana Dashboard Example as a baseline of your dashboard.
+Use find replace to:
+ - GRAPHITE_PREFIX - The prefix where this docker holds the metrics
+ - COLLECTD_GRAPHITE_PREFIX - The prefix where collectd sends the metrics
 
 ## Grafana Screenshots
 ![Dashboard prtscr 1](https://i.imgsafe.org/fe55084226.png)
