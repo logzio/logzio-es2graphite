@@ -34,6 +34,9 @@ Elasticsearch.prefix.MY_ES_CLUSTER.node1.jvm.mem.heap_used_percent
 docker run --restart=always -d --name="es2graphite" \
                         -e ELASTICSEARCH_ADDR="es-client.internal.domain.example" \
                         -e GRAPHITE="graphite.internal.domain.example" \
+                        -e ELASTICSEARCH_PROTOCOL="https" \
+                        -e ELASTICSEARCH_USER_NAME="mahUser" \
+                        -e ELASTICSEARCH_PASSWORD="mahPassword" 
                         -e GRAPHITE_PREFIX="PROD.Elasticsearch" \
                         -e INTERVAL_SECONDS=20 \
                         -e BULK_SIZE=10 \
