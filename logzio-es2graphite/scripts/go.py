@@ -12,6 +12,9 @@
 #       ELASTICSEARCH_ADDR - The elasticsearch cluster to monitor
 #
 #   Optional:
+#       ELASTICSEARCH_PROTOCOL: http or https. Defaults to http.
+#       ELASTICSEARCH_USER_NAME: Elasticsearch user name to use for basic auth
+#       ELASTICSEARCH_PASSWORD: Elasticsearch password to use for basic auth
 #       GRAPHITE_PREFIX - The prefix under graphite the metrics should be placed in (Default: Elasticsearch)
 #       GRAPHITE_PORT - Graphite pickle port (Default: 2004)
 #       INTERVAL_SECONDS - The sample interval (Default: 10)
@@ -20,19 +23,23 @@
 
 
 import os
+import pickle
+import re
 import socket
 import struct
-import requests
 import sys
-import re
-import pickle
-from time import time, sleep
+from time import sleep, time
+
+import requests
 
 # Get mandatory variables
 elasticsearchAddr = os.getenv('ELASTICSEARCH_ADDR')
 graphite = os.getenv('GRAPHITE')
 
 # Gets optional variables
+elasticsearch_protocol = os.getenv('ELASTICSEARCH_PROTOCOL', 'http').lower()
+elasticsearch_user_name = os.getenv('ELASTICSEARCH_USER_NAME', '')
+elasticsearch_password = os.getenv('ELASTICSEARCH_PASSWORD', '')
 graphite_prefix = os.getenv('GRAPHITE_PREFIX', "Elasticsearch")
 graphite_port = os.getenv('GRAPHITE_PORT', '2004')
 interval = os.getenv('INTERVAL_SECONDS', 10)
@@ -49,8 +56,15 @@ if not all([elasticsearchAddr, graphite]):
 
     sys.exit(1)
 
+if elasticsearch_protocol not in ['http', 'https']:
+    print ("#############################################################################################")
+    print ("Please provide a valid protocol: http or https")
+    print ("#############################################################################################")
+
+    sys.exit(1)
+
 # Query the cluster root once, to get the cluster name
-clusterRoot = requests.get("http://{0}:9200/".format(elasticsearchAddr)).json()
+clusterRoot = requests.get("{0}://{1}:9200/".format(elasticsearch_protocol, elasticsearchAddr), auth=(elasticsearch_user_name, elasticsearch_password)).json()
 clusterName = clusterRoot["cluster_name"]
 
 
@@ -109,7 +123,7 @@ while True:
     to_graphite = []
 
     # Getting nodes JVM usage
-    nodesJson = requests.get("http://{0}:9200/_nodes/stats".format(elasticsearchAddr)).json()
+    nodesJson = requests.get("{0}://{1}:9200/_nodes/stats".format(elasticsearch_protocol, elasticsearchAddr), auth=(elasticsearch_user_name, elasticsearch_password)).json()
 
     # Iterate over the nodes
     for currNode in nodesJson["nodes"]:
