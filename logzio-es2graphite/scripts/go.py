@@ -16,7 +16,8 @@
 #       ELASTICSEARCH_USER_NAME: Elasticsearch user name to use for basic auth
 #       ELASTICSEARCH_PASSWORD: Elasticsearch password to use for basic auth
 #       GRAPHITE_PREFIX - The prefix under graphite the metrics should be placed in (Default: Elasticsearch)
-#       GRAPHITE_PORT - Graphite pickle port (Default: 2004)
+#       GRAPHITE_PROTOCOL - The protocol used to send data to graphite (Default: pickle. Can be either pickle or plaintext)
+#       GRAPHITE_PORT - Graphite port (Default: 2004)
 #       INTERVAL_SECONDS - The sample interval (Default: 10)
 #       BULK_SIZE - The amount of metrics to be sent in each bulk request (Default: 50)
 #       MAX_RETRY_BULK - The number of repeated attempts to send a bulk upon IOError failure (Default: 3)
@@ -42,6 +43,7 @@ elasticsearch_user_name = os.getenv('ELASTICSEARCH_USER_NAME', '')
 elasticsearch_password = os.getenv('ELASTICSEARCH_PASSWORD', '')
 graphite_prefix = os.getenv('GRAPHITE_PREFIX', "Elasticsearch")
 graphite_port = os.getenv('GRAPHITE_PORT', '2004')
+graphite_protocol = os.getenv('GRAPHITE_PROTOCOL', 'pickle')
 interval = os.getenv('INTERVAL_SECONDS', 10)
 bulk_size = os.getenv('BULK_SIZE', 50)
 max_retry_bulk = os.getenv('MAX_RETRY_BULK', 3)
@@ -58,10 +60,18 @@ if not all([elasticsearchAddr, graphite]):
 
 if elasticsearch_protocol not in ['http', 'https']:
     print ("#############################################################################################")
-    print ("Please provide a valid protocol: http or https")
+    print ("Please provide a valid elasticsearch protocol: http or https")
     print ("#############################################################################################")
 
     sys.exit(1)
+
+if graphite_protocol not in ['pickle', 'plaintext']:
+    print ("#############################################################################################")
+    print ("Please provide a valid graphite protocol: pickle or plaintext")
+    print ("#############################################################################################")
+
+    sys.exit(1)
+
 
 # Query the cluster root once, to get the cluster name
 clusterRoot = requests.get("{0}://{1}:9200/".format(elasticsearch_protocol, elasticsearchAddr), auth=(elasticsearch_user_name, elasticsearch_password)).json()
@@ -90,14 +100,25 @@ def get_nested_values(values, path, graphite_list):
     for sub_node in values:
         get_nested_values(values[sub_node], path + "." + normalize_leaf(sub_node), graphite_list)
 
+def tuples_to_lines(metrics_tuples):
+    lines = []
+    for metric_tuple in metrics_tuples:
+        lines.append("{0} {1} {2}".format(metric_tuple[0], metric_tuple[1][1], metric_tuple[1][0]))
+
+    return lines
 
 def send_to_graphite(metrics, sock):
     curr_try = 0
     while True:
         try:
-            payload = pickle.dumps(metrics, protocol=2)
-            header = struct.pack("!L", len(payload))
-            message = header + payload
+            if graphite_protocol == 'pickle':
+                payload = pickle.dumps(metrics, protocol=2)
+                header = struct.pack("!L", len(payload))
+                message = header + payload
+            else:
+                metricslines = tuples_to_lines(metrics)
+                message = '\n'.join(metricslines) + '\n'
+
             sock.send(message)
             break
 

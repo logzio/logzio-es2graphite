@@ -16,7 +16,8 @@ The following parameters need to be passed as environment variables to the conta
 |ELASTICSEARCH_USER_NAME|Username for basic auth|No|| 
 |ELASTICSEARCH_PASSWORD|Password for basic auth|No||
 |GRAPHITE_PREFIX|The prefix under graphite you want your metrics in. We will add the cluster name, and the node name after that|No|Elasticsearch|
-|GRAPHITE_PORT|Graphite pickle port|No|2004|
+|GRAPHITE_PROTOCOL|Graphite protocol. Allowed values are 'pickle' or 'plaintext'|No|pickle|
+|GRAPHITE_PORT|Graphite port|No|2004|
 |INTERVAL_SECONDS|The frequency in which Elasticsearch is to be sampled (preferably, the same value as your graphite configured metrics interval)|No|10|
 |BULK_SIZE|The amount of metrics to be sent in each bulk request|No|50|
 |MAX_RETRY_BULK|The number of repeated attempts to send a bulk that failed on IOError (originated from graphite)|No|3|
