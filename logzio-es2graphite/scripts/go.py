@@ -37,6 +37,7 @@ elasticsearchAddr = os.getenv('ELASTICSEARCH_ADDR')
 graphite = os.getenv('GRAPHITE')
 
 # Gets optional variables
+elasticsearch_port = os.getenv('ELASTICSEARCH_PORT', '9200')
 elasticsearch_protocol = os.getenv('ELASTICSEARCH_PROTOCOL', 'http').lower()
 elasticsearch_user_name = os.getenv('ELASTICSEARCH_USER_NAME', '')
 elasticsearch_password = os.getenv('ELASTICSEARCH_PASSWORD', '')
@@ -123,7 +124,8 @@ while True:
     to_graphite = []
 
     # Getting nodes JVM usage
-    nodesJson = requests.get("{0}://{1}:9200/_nodes/stats".format(elasticsearch_protocol, elasticsearchAddr), auth=(elasticsearch_user_name, elasticsearch_password)).json()
+    nodesJson = requests.get("{0}://{1}:{2}/_nodes/stats".format(elasticsearch_protocol, elasticsearchAddr, elasticsearch_port),
+                             auth=(elasticsearch_user_name, elasticsearch_password)).json()
 
     # Iterate over the nodes
     for currNode in nodesJson["nodes"]:
