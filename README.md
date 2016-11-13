@@ -13,6 +13,7 @@ The following parameters need to be passed as environment variables to the conta
 |ELASTICSEARCH_ADDR|Your Elasticsearch cluster address to monitor (preferably, the ip/hostname of one of your client nodes) - the protocol and port are not required|Yes|-|
 |GRAPHITE|The graphite server the metrics should end up in|Yes|-|
 |ELASTICSEARCH_PROTOCOL|http or https. Upper or lower case are acceptable. Typos arre knot.|No|http| 
+|ELASTICSEARCH_PORT|Port number (usually 9200)|No|9200| 
 |ELASTICSEARCH_USER_NAME|Username for basic auth|No|| 
 |ELASTICSEARCH_PASSWORD|Password for basic auth|No||
 |GRAPHITE_PREFIX|The prefix under graphite you want your metrics in. We will add the cluster name, and the node name after that|No|Elasticsearch|
