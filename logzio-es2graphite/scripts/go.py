@@ -65,7 +65,8 @@ if elasticsearch_protocol not in ['http', 'https']:
     sys.exit(1)
 
 # Query the cluster root once, to get the cluster name
-clusterRoot = requests.get("{0}://{1}:9200/".format(elasticsearch_protocol, elasticsearchAddr), auth=(elasticsearch_user_name, elasticsearch_password)).json()
+clusterRoot = requests.get("{0}://{1}:{2}/".format(elasticsearch_protocol, elasticsearchAddr, elasticsearch_port),
+                           auth=(elasticsearch_user_name, elasticsearch_password)).json()
 clusterName = clusterRoot["cluster_name"]
 
 
